@@ -1,16 +1,128 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-full">
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>smartgate</title>
+
+  <!-- SEO Meta Tags -->
+  <title>SmartGate - Intelligent Student Attendance & Security System</title>
+  <meta name="description"
+    content="AI-powered facial recognition system for automated student attendance tracking and campus security management">
+  <meta name="keywords" content="attendance, facial recognition, student management, security, smart campus">
+  <meta name="author" content="SmartGate">
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="SmartGate - Intelligent Student Attendance System">
+  <meta property="og:description" content="AI-powered facial recognition for automated student tracking">
+  <meta property="og:type" content="website">
+  <!-- <meta property="og:image" content="/social-preview.png"> -->
+  <!-- <meta property="og:url" content="https://yourdomain.com"> -->
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SmartGate - Intelligent Student Attendance System">
+  <meta name="twitter:description" content="AI-powered facial recognition for automated student tracking">
+  <!-- <meta name="twitter:image" content="/social-preview.png"> -->
+
+  <!-- Favicon & App Icons -->
+  <link rel="icon" type="image/svg+xml" href="/logo.svg">
+  <link rel="alternate icon" type="image/png" href="/favicon.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json" crossorigin="use-credentials">
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="msapplication-TileColor" content="#2563eb">
+
+  <!-- Preload Critical Resources -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Security Headers (would be configured on server) -->
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+
+  <!-- Performance Optimizations -->
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "SmartGate",
+    "description": "AI-powered facial recognition system for student attendance tracking",
+    "url": "https://yourdomain.com",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Web Browser"
+  }
+  </script>
 </head>
 
-<body>
-  <div id="root"></div>
+<body class="h-full antialiased">
+  <!-- Progressive Enhancement: No-JS Fallback -->
+  <noscript>
+    <div style="text-align: center; padding: 2rem; font-family: system-ui, sans-serif;">
+      <h1>JavaScript Required</h1>
+      <p>SmartGate requires JavaScript to function properly. Please enable JavaScript in your browser settings.</p>
+    </div>
+  </noscript>
+
+  <!-- Root Application Container -->
+  <div id="root" role="main">
+    <!-- Loading State -->
+    <div
+      style="display: flex; justify-content: center; align-items: center; height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+      <div style="text-align: center; color: white;">
+        <div
+          style="width: 48px; height: 48px; border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid white; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem;">
+        </div>
+        <p style="font-family: system-ui, sans-serif; font-size: 1.125rem;">Loading SmartGate...</p>
+      </div>
+    </div>
+    <style>
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </div>
+
+  <!-- Scripts -->
   <script type="module" src="/src/main.tsx"></script>
+
+  <!-- Performance Monitoring (example with Sentry) -->
+  <script>
+    // Error tracking initialization would go here
+    if (typeof window !== 'undefined') {
+      // Example: Initialize monitoring service
+      window.addEventListener('error', function (e) {
+        console.error('Application Error:', e.error);
+        // Send to your error tracking service
+      });
+
+      // Performance monitoring
+      window.addEventListener('load', function () {
+        if ('performance' in window) {
+          const navTiming = performance.getEntriesByType('navigation')[0];
+          console.log('Page Load Time:', navTiming.loadEventEnd - navTiming.navigationStart);
+        }
+      });
+    }
+  </script>
 </body>
 
 </html>
