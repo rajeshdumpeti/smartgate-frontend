@@ -1,0 +1,10 @@
+{
+  "totalStudents": 1250,
+  "presentToday": 1102,
+  "unknownDetections": 3,
+  "lastEvent": {
+    "name": "Riya S.",
+    "eventType": "Entry",
+    "timestamp": "09:02 AM"
+  }
+}
