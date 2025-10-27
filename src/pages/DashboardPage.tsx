@@ -13,7 +13,7 @@ const DashboardPage = () => {
   const { totalStudents, presentToday, unknownDetections, lastEvent } = data!;
 
   return (
-    <div className="p-8 space-y-6">
+    <div className="space-y-6">
       {/* Header */}
       <h1 className="text-2xl font-semibold text-gray-800">
         SmartGate Live View

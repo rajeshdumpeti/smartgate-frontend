@@ -5,6 +5,8 @@ interface UIState {
   toggleSidebar: () => void;
   closeSidebar: () => void;
   openSidebar: () => void;
+  isCameraRunning: boolean;
+  setCameraRunning: (value: boolean) => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -13,4 +15,6 @@ export const useUIStore = create<UIState>((set) => ({
     set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
   closeSidebar: () => set({ isSidebarOpen: false }),
   openSidebar: () => set({ isSidebarOpen: true }),
+  isCameraRunning: false,
+  setCameraRunning: (value) => set({ isCameraRunning: value }),
 }));

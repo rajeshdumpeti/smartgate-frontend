@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useDashboardStats } from "../../hooks/useDashboardStats";
 import StatsCard from "./StatsCards";
 import {
@@ -8,13 +9,33 @@ import {
   FaVideo,
 } from "react-icons/fa";
 import eyeImage from "../../assets/eye_image.png";
+import { startLiveDetection, stopLiveDetection } from "../../api/attendance";
+import { useCameraStore } from "../../store/useCameraStore";
 
 const DashboardPage = () => {
   const { data, isLoading, isError } = useDashboardStats();
+  const { isCameraRunning, setCameraRunning } = useCameraStore();
+  const [isLoadingAction, setIsLoadingAction] = useState(false);
+
+  const handleToggleDetection = async () => {
+    try {
+      setIsLoadingAction(true);
+      if (isCameraRunning) {
+        await stopLiveDetection();
+        setCameraRunning(false);
+      } else {
+        await startLiveDetection();
+        setCameraRunning(true);
+      }
+    } catch (e) {
+      console.error("Failed to toggle detection", e);
+    } finally {
+      setIsLoadingAction(false);
+    }
+  };
 
   if (isLoading)
     return <p className="p-6 text-gray-600 text-sm">Loading dashboard...</p>;
-
   if (isError)
     return <p className="p-6 text-red-500 text-sm">Failed to load data</p>;
 
@@ -22,7 +43,6 @@ const DashboardPage = () => {
 
   return (
     <div className="p-8 space-y-8">
-      {/* Header */}
       <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
         SmartGate Live View
       </h1>
@@ -34,16 +54,30 @@ const DashboardPage = () => {
           alt="SmartGate Eye"
           className="w-64 h-40 object-cover rounded-xl shadow-sm"
         />
-
-        <p className="text-gray-700 font-semibold text-lg">Camera Offline</p>
+        <p className="text-gray-700 font-semibold text-lg">
+          {isCameraRunning ? "Camera Active" : "Camera Offline"}
+        </p>
         <p className="text-gray-500 text-sm">
-          Press <span className="font-medium">'Start Detection'</span> to begin
-          the live feed and monitor the gate.
+          {isCameraRunning
+            ? "SmartGate is actively detecting students at the gate."
+            : "Press 'Start Detection' to begin the live feed and monitor the gate."}
         </p>
 
-        <button className="mt-3 px-6 py-3 rounded-full bg-blue-600 text-white font-semibold shadow-md hover:bg-blue-700 transition flex items-center gap-2">
-          <FaVideo className="text-white text-lg" />
-          Start Detection
+        <button
+          onClick={handleToggleDetection}
+          disabled={isLoadingAction}
+          className={`mt-3 px-6 py-3 rounded-full font-semibold shadow-md transition flex items-center gap-2 ${
+            isCameraRunning
+              ? "bg-red-500 hover:bg-red-600 text-white"
+              : "bg-blue-600 hover:bg-blue-700 text-white"
+          }`}
+        >
+          <FaVideo />
+          {isLoadingAction
+            ? "Processing..."
+            : isCameraRunning
+              ? "Stop Detection"
+              : "Start Detection"}
         </button>
       </div>
 
@@ -68,7 +102,7 @@ const DashboardPage = () => {
           title="Last Event"
           value={
             lastEvent
-              ? `${lastEvent.name} - ${lastEvent.eventType} ${lastEvent.timestamp}`
+              ? `${lastEvent.name} - ${lastEvent.eventType} at ${lastEvent.timestamp}`
               : "No recent events"
           }
           icon={<FaClock className="text-purple-500" />}
