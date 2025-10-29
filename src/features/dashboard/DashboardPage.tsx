@@ -11,28 +11,29 @@ import {
 import eyeImage from "../../assets/eye_image.png";
 import { startLiveDetection, stopLiveDetection } from "../../api/attendance";
 import { useCameraStore } from "../../store/useCameraStore";
-
+import DetectionLogPanel from "./DetectionLogPanel";
+import LiveCameraView from "./LiveCameraView";
 const DashboardPage = () => {
   const { data, isLoading, isError } = useDashboardStats();
-  const { isCameraRunning, setCameraRunning } = useCameraStore();
-  const [isLoadingAction, setIsLoadingAction] = useState(false);
+  // const { isCameraRunning, setCameraRunning } = useCameraStore();
+  // const [isLoadingAction, setIsLoadingAction] = useState(false);
 
-  const handleToggleDetection = async () => {
-    try {
-      setIsLoadingAction(true);
-      if (isCameraRunning) {
-        await stopLiveDetection();
-        setCameraRunning(false);
-      } else {
-        await startLiveDetection();
-        setCameraRunning(true);
-      }
-    } catch (e) {
-      console.error("Failed to toggle detection", e);
-    } finally {
-      setIsLoadingAction(false);
-    }
-  };
+  // const handleToggleDetection = async () => {
+  //   try {
+  //     setIsLoadingAction(true);
+  //     if (isCameraRunning) {
+  //       await stopLiveDetection();
+  //       setCameraRunning(false);
+  //     } else {
+  //       await startLiveDetection();
+  //       setCameraRunning(true);
+  //     }
+  //   } catch (e) {
+  //     console.error("Failed to toggle detection", e);
+  //   } finally {
+  //     setIsLoadingAction(false);
+  //   }
+  // };
 
   if (isLoading)
     return <p className="p-6 text-gray-600 text-sm">Loading dashboard...</p>;
@@ -54,7 +55,9 @@ const DashboardPage = () => {
           alt="SmartGate Eye"
           className="w-64 h-40 object-cover rounded-xl shadow-sm"
         />
-        <p className="text-gray-700 font-semibold text-lg">
+        <LiveCameraView />
+        <DetectionLogPanel />
+        {/* <p className="text-gray-700 font-semibold text-lg">
           {isCameraRunning ? "Camera Active" : "Camera Offline"}
         </p>
         <p className="text-gray-500 text-sm">
@@ -64,7 +67,7 @@ const DashboardPage = () => {
         </p>
 
         <button
-          onClick={handleToggleDetection}
+          // onClick={handleToggleDetection}
           disabled={isLoadingAction}
           className={`mt-3 px-6 py-3 rounded-full font-semibold shadow-md transition flex items-center gap-2 ${
             isCameraRunning
@@ -78,7 +81,7 @@ const DashboardPage = () => {
             : isCameraRunning
               ? "Stop Detection"
               : "Start Detection"}
-        </button>
+        </button> */}
       </div>
 
       {/* Stats Section */}
