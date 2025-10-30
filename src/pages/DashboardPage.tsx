@@ -1,6 +1,7 @@
 import { useDashboardStats } from "../hooks/useDashboardStats";
 import StatsCard from "../features/dashboard/StatsCards";
 import { FaUsers, FaUserCheck, FaQuestion, FaClock } from "react-icons/fa";
+import LiveCameraView from "../features/dashboard/LiveCameraView";
 
 const DashboardPage = () => {
   const { data, isLoading, isError } = useDashboardStats();
@@ -50,12 +51,15 @@ const DashboardPage = () => {
         />
       </div>
 
-      {/* Live View Placeholder */}
-      <div className="bg-white rounded-xl shadow-md p-10 flex flex-col items-center justify-center border border-gray-100">
-        <p className="text-gray-600 mb-4">Camera Offline</p>
-        <button className="px-6 py-3 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition">
-          Start Detection
-        </button>
+      {/* Live View Section */}
+      <div className="mt-8">
+        <h2 className="text-lg font-semibold text-gray-800 mb-3">
+          Live Face Detection
+        </h2>
+        <p className="text-gray-500 text-sm mb-4">
+          Activate your local camera to start SmartGate’s real-time recognition.
+        </p>
+        <LiveCameraView />
       </div>
     </div>
   );
