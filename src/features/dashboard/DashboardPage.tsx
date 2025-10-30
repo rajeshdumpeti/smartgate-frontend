@@ -1,38 +1,13 @@
 import { useDashboardStats } from "../../hooks/useDashboardStats";
 import StatsCard from "./StatsCards";
-import {
-  FaUsers,
-  FaUserCheck,
-  FaQuestion,
-  FaClock,
-  FaVideo,
-} from "react-icons/fa";
-import eyeImage from "../../assets/eye_image.png";
-import { startLiveDetection, stopLiveDetection } from "../../api/attendance";
+import { FaUsers, FaUserCheck, FaQuestion, FaClock } from "react-icons/fa";
 import { useCameraStore } from "../../store/useCameraStore";
-import { useState } from "react";
+import DetectionLogPanel from "./DetectionLogPanel";
+import LiveCameraView from "./LiveCameraView";
 
 const DashboardPage = () => {
   const { data, isLoading, isError } = useDashboardStats();
-  const { isCameraRunning, setCameraRunning } = useCameraStore();
-  const [isLoadingAction, setIsLoadingAction] = useState(false);
-
-  const handleToggleDetection = async () => {
-    try {
-      setIsLoadingAction(true);
-      if (isCameraRunning) {
-        await stopLiveDetection();
-        setCameraRunning(false);
-      } else {
-        await startLiveDetection();
-        setCameraRunning(true);
-      }
-    } catch (e) {
-      console.error("Failed to toggle detection", e);
-    } finally {
-      setIsLoadingAction(false);
-    }
-  };
+  const { setCameraRunning } = useCameraStore();
 
   if (isLoading)
     return <p className="p-6 text-gray-600 text-sm">Loading dashboard...</p>;
@@ -47,38 +22,19 @@ const DashboardPage = () => {
         SmartGate Live View
       </h1>
 
-      {/* Live View Section */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-center text-center space-y-4">
-        <img
-          src={eyeImage}
-          alt="SmartGate Eye"
-          className="w-64 h-40 object-cover rounded-xl shadow-sm"
-        />
-        <p className="text-gray-700 font-semibold text-lg">
-          {isCameraRunning ? "Camera Active" : "Camera Offline"}
-        </p>
-        <p className="text-gray-500 text-sm">
-          {isCameraRunning
-            ? "SmartGate is actively detecting students at the gate."
-            : "Press 'Start Detection' to begin the live feed and monitor the gate."}
-        </p>
+      {/* Live View Section - 70% Camera | 30% Logs */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Camera Section - 70% */}
+          <div className="lg:w-7/12">
+            <LiveCameraView />
+          </div>
 
-        <button
-          onClick={handleToggleDetection}
-          disabled={isLoadingAction}
-          className={`mt-3 px-6 py-3 rounded-full font-semibold shadow-md transition flex items-center gap-2 ${
-            isCameraRunning
-              ? "bg-red-500 hover:bg-red-600 text-white"
-              : "bg-blue-600 hover:bg-blue-700 text-white"
-          }`}
-        >
-          <FaVideo />
-          {isLoadingAction
-            ? "Processing..."
-            : isCameraRunning
-              ? "Stop Detection"
-              : "Start Detection"}
-        </button>
+          {/* Detection Logs Section - 30% */}
+          <div className="lg:w-5/12">
+            <DetectionLogPanel />
+          </div>
+        </div>
       </div>
 
       {/* Stats Section */}

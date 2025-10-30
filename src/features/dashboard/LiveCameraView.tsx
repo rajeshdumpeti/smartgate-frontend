@@ -1,6 +1,7 @@
 import React from "react";
 import { useLiveCamera } from "../../hooks/useLiveCamera";
 import Button from "../../components/ui/Button";
+import eyeImage from "../../assets/eye_image.png";
 
 const LiveCameraView: React.FC = () => {
   const {
@@ -14,18 +15,21 @@ const LiveCameraView: React.FC = () => {
 
   return (
     <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 flex flex-col items-center space-y-4">
-      {/* Video Feed */}
+      {/* Video/Image Container - Toggles between camera feed and eye image */}
       <div className="w-full max-w-2xl aspect-video bg-gray-200 rounded-lg overflow-hidden relative">
+        {/* Video Feed - Only shows when camera is active */}
         <video
           ref={videoRef}
-          className="w-full h-full object-cover"
+          className={`w-full h-full object-cover ${isActive ? "block" : "hidden"}`}
           autoPlay
           playsInline
           muted
         />
+
+        {/* Eye Image - Only shows when camera is inactive */}
         {!isActive && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-100/80 text-gray-500 text-sm">
-            Camera is off
+          <div className="w-full h-full flex items-center justify-center bg-gray-100">
+            <img src={eyeImage} alt="SmartGate Eye" />
           </div>
         )}
       </div>
