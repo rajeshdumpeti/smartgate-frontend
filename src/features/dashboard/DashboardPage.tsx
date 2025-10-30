@@ -1,6 +1,6 @@
-import { useState } from "react";
 import { useDashboardStats } from "../../hooks/useDashboardStats";
 import StatsCard from "./StatsCards";
+<<<<<<< Updated upstream
 import {
   FaUsers,
   FaUserCheck,
@@ -33,6 +33,15 @@ const DashboardPage = () => {
       setIsLoadingAction(false);
     }
   };
+=======
+import { FaUsers, FaUserCheck, FaQuestion, FaClock } from "react-icons/fa";
+import DetectionLogPanel from "./DetectionLogPanel";
+import LiveCameraView from "./LiveCameraView";
+
+const DashboardPage = () => {
+  const { data, isLoading, isError } = useDashboardStats();
+  // const { setCameraRunning } = useCameraStore();
+>>>>>>> Stashed changes
 
   if (isLoading)
     return <p className="p-6 text-gray-600 text-sm">Loading dashboard...</p>;
@@ -47,6 +56,7 @@ const DashboardPage = () => {
         SmartGate Live View
       </h1>
 
+<<<<<<< Updated upstream
       {/* Live View Section */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-center text-center space-y-4">
         <img
@@ -79,6 +89,21 @@ const DashboardPage = () => {
               ? "Stop Detection"
               : "Start Detection"}
         </button>
+=======
+      {/* Live View Section - 70% Camera | 30% Logs */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Camera Section - 70% */}
+          <div className="lg:w-7/12">
+            <LiveCameraView />
+          </div>
+
+          {/* Detection Logs Section - 30% */}
+          <div className="lg:w-5/12">
+            <DetectionLogPanel />
+          </div>
+        </div>
+>>>>>>> Stashed changes
       </div>
 
       {/* Stats Section */}

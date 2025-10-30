@@ -6,6 +6,7 @@ import {
   FaQuestionCircle,
   FaSignOutAlt,
   FaClock,
+  FaSchool,
 } from "react-icons/fa";
 import { useUIStore } from "../../store/useUIStore";
 import logo from "../../assets/logo2.svg";
@@ -16,6 +17,7 @@ const Sidebar = () => {
 
   const navItems = [
     { name: "Dashboard", path: "/dashboard", icon: <FaChartBar /> },
+    { name: "Student Directory", path: "/students", icon: <FaSchool /> },
     { name: "Events", path: "/events", icon: <FaClock /> },
     { name: "Cameras", path: "/cameras", icon: <FaVideo /> },
     { name: "Settings", path: "/settings", icon: <FaCogs /> },

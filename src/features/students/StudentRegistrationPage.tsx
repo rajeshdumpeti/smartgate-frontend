@@ -4,6 +4,7 @@ import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { registerStudent } from "../../api/students";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // NEW: Import useNavigate
 import ImageUpload from "./components/ImageUpload";
 import Button from "../../components/ui/Button";
 
@@ -20,6 +21,7 @@ const studentSchema = z.object({
 type StudentForm = z.infer<typeof studentSchema>;
 
 const StudentRegistrationPage = () => {
+  const navigate = useNavigate(); // NEW: Hook for routing
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const {
@@ -49,10 +51,13 @@ const StudentRegistrationPage = () => {
       };
       return registerStudent(payload);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      // UPDATED: Receive response data (assumes registerStudent returns { id, ... })
       alert("✅ Student registered successfully!");
       reset();
       setSelectedFile(null);
+      // NEW: Route to the new student's detail page
+      navigate(`/students/${data.id}`);
     },
     onError: (err: any) => {
       console.error(err);
@@ -84,7 +89,6 @@ const StudentRegistrationPage = () => {
           Student Information
         </h2>
 
-        {/* REMOVED the duplicate onSubmit from form - only keep handleSubmit */}
         <form
           onSubmit={handleSubmit((data) => mutation.mutate(data))}
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
@@ -169,7 +173,7 @@ const StudentRegistrationPage = () => {
             )}
           </div>
 
-          {/* Parent Phone - ADDED THIS MISSING FIELD */}
+          {/* Parent Phone */}
           <div className="flex flex-col">
             <label className="text-sm font-medium text-gray-700 mb-1">
               Parent Phone Number
@@ -195,7 +199,7 @@ const StudentRegistrationPage = () => {
             <ImageUpload onFileSelect={setSelectedFile} />
           </div>
 
-          {/* Buttons - REMOVED onClick from submit button */}
+          {/* Buttons */}
           <div className="md:col-span-2 flex justify-end gap-3 mt-8">
             <Button
               type="button"
@@ -207,11 +211,7 @@ const StudentRegistrationPage = () => {
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              disabled={mutation.isPending}
-              // REMOVED the onClick handler here - form onSubmit will handle it
-            >
+            <Button type="submit" disabled={mutation.isPending}>
               {mutation.isPending ? "Registering..." : "Register Student"}
             </Button>
           </div>
