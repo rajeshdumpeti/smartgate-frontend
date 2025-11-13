@@ -20,7 +20,7 @@ const StudentListPage = () => {
     return <p className="p-6 text-red-500">Failed to load student data</p>;
 
   return (
-    <div className="p-8 space-y-6">
+    <div className="p-4 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

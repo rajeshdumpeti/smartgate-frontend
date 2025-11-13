@@ -14,7 +14,7 @@ const LiveCameraView: React.FC = () => {
   } = useLiveCamera();
 
   return (
-    <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 flex flex-col items-center space-y-4">
+    <div className="bg-white rounded-xl shadow-md border border-gray-100 pb-4 flex flex-col items-center space-y-2">
       {/* Video/Image Container - Toggles between camera feed and eye image */}
       <div className="w-full max-w-2xl aspect-video bg-gray-200 rounded-lg overflow-hidden relative">
         {/* Video Feed - Only shows when camera is active */}

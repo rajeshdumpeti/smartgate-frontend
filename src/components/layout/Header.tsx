@@ -24,9 +24,6 @@ const Header = () => {
         >
           <FaBars size={20} />
         </button>
-        <h2 className="text-lg font-semibold text-gray-800">
-          SmartGate Dashboard
-        </h2>
       </div>
 
       {/* Right Section */}

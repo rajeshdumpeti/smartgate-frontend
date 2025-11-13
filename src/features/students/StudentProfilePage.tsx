@@ -1,13 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { fetchStudentById } from "../../api/students";
 import { fetchEvents } from "../../api/events";
-import { FaArrowUp, FaArrowDown } from "react-icons/fa";
+import { FaArrowUp, FaArrowDown, FaArrowLeft, FaCheck } from "react-icons/fa";
 import Button from "../../components/ui/Button";
+// import { fetchMarksByStudent } from "../../api/marks";
+import { useStudentMarks } from "../../hooks/useStudentMarks";
 
 const StudentProfilePage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const studentId = Number(id);
+  const { data: marks, isLoading: marksLoading } = useStudentMarks(studentId);
+
+  if (marksLoading)
+    return <p className="text-gray-500 p-6">Loading marks...</p>;
 
   // Fetch student details
   const {
@@ -30,17 +37,27 @@ const StudentProfilePage = () => {
     enabled: !!studentId,
   });
 
+  const handleBack = () => {
+    navigate(-1); // Go back to previous page
+  };
+
   if (loadingStudent || loadingEvents) return <ProfileSkeleton />;
   if (studentError || eventError)
     return <p className="p-6 text-red-500">Failed to load student data.</p>;
 
   return (
-    <div className="p-8 space-y-6">
+    <div className="p-8 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">{student.name}</h1>
-          <p className="text-gray-500 text-sm mt-1">Active Student Profile</p>
+        <div className="flex items-center gap-4">
+          {/* Back Button */}
+          <button
+            onClick={handleBack}
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors p-2 hover:bg-gray-100 rounded-lg"
+          >
+            <FaArrowLeft className="text-sm" />
+            <span className="text-sm font-medium">Back</span>
+          </button>
         </div>
         <div className="flex gap-3">
           <Button variant="secondary">Deactivate Student</Button>
@@ -49,19 +66,29 @@ const StudentProfilePage = () => {
       </div>
 
       {/* Profile + Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-[40%_60%] gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-[30%_70%] gap-4">
         {/* Left Card - Profile (40%) */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8">
           {/* Student Info */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-8 relative">
             {student.photo_path ? (
-              <img
-                src={`http://127.0.0.1:8000/faces/${student.photo_path.split("/").pop()}`}
-                alt={student.name}
-                className="w-32 h-32 rounded-full object-cover mx-auto mb-6 border-4 border-gray-100"
-              />
+              <div className="relative inline-block">
+                <img
+                  src={`http://127.0.0.1:8000/faces/${student.photo_path.split("/").pop()}`}
+                  alt={student.name}
+                  className="w-32 h-32 rounded-full object-cover mx-auto mb-6 border-4 border-gray-100"
+                />
+                <div className="absolute bottom-6 right-6 w-6 h-6 bg-green-500 rounded-full border-4 border-white flex items-center justify-center">
+                  <FaCheck className="w-3 h-3 text-white" />
+                </div>
+              </div>
             ) : (
-              <div className="w-32 h-32 rounded-full bg-gray-200 mx-auto mb-6 border-4 border-gray-100"></div>
+              <div className="relative inline-block">
+                <div className="w-32 h-32 rounded-full bg-gray-200 mx-auto mb-6 border-4 border-gray-100"></div>
+                <div className="absolute bottom-6 right-6 w-6 h-6 bg-green-500 rounded-full border-4 border-white flex items-center justify-center">
+                  <FaCheck className="w-3 h-3 text-white" />
+                </div>
+              </div>
             )}
 
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -198,23 +225,63 @@ const StudentProfilePage = () => {
           )}
         </div>
       </div>
+      {/* 🧠 Marks Section */}
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <h2 className="text-lg font-semibold text-gray-800 mb-4">
+          Marks Report
+        </h2>
+
+        {marks?.length ? (
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-gray-500 uppercase text-xs border-b">
+                <th className="text-left py-2 px-2">Subject</th>
+                <th className="text-left py-2 px-2">Score</th>
+                <th className="text-left py-2 px-2">Exam</th>
+                <th className="text-left py-2 px-2">Remarks</th>
+                <th className="text-left py-2 px-2">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {marks.map((m: any) => (
+                <tr key={m.id} className="border-b hover:bg-gray-50 transition">
+                  <td className="py-2 px-2">{m.subject}</td>
+                  <td className="py-2 px-2">
+                    {m.score}/{m.max_score}
+                  </td>
+                  <td className="py-2 px-2">{m.exam_type}</td>
+                  <td className="py-2 px-2">{m.remarks || "-"}</td>
+                  <td className="py-2 px-2 text-gray-500">
+                    {new Date(m.created_at).toLocaleDateString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p className="text-gray-500 text-sm">No marks recorded yet.</p>
+        )}
+      </div>
     </div>
   );
 };
 
 const ProfileSkeleton = () => (
-  <div className="animate-pulse p-8 space-y-6">
+  <div className="animate-pulse p-8 space-y-4">
     <div className="flex justify-between items-center">
-      <div>
-        <div className="h-8 w-64 bg-gray-200 rounded mb-2"></div>
-        <div className="h-4 w-32 bg-gray-200 rounded"></div>
+      <div className="flex items-center gap-4">
+        <div className="h-8 w-16 bg-gray-200 rounded"></div>
+        <div>
+          <div className="h-8 w-64 bg-gray-200 rounded mb-2"></div>
+          <div className="h-4 w-32 bg-gray-200 rounded"></div>
+        </div>
       </div>
       <div className="flex gap-3">
         <div className="h-10 w-40 bg-gray-200 rounded"></div>
         <div className="h-10 w-40 bg-gray-200 rounded"></div>
       </div>
     </div>
-    <div className="grid grid-cols-1 lg:grid-cols-[40%_60%] gap-8">
+    <div className="grid grid-cols-1 lg:grid-cols-[30%_70%] gap-4">
       <div className="bg-gray-100 rounded-xl h-96"></div>
       <div className="bg-gray-100 rounded-xl h-96"></div>
     </div>
